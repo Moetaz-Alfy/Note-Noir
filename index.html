@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note Noir — Your Scent, Composed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0908;
+    --charcoal:#151311;
+    --card:#1c1916;
+    --line:#332c24;
+    --ivory:#efe7d8;
+    --ivory-dim:#b8ae9c;
+    --gold:#c6a15b;
+    --gold-bright:#e6c988;
+    --wine:#3a1620;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--ivory);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  .serif{font-family:'Cormorant Garamond',serif;}
+  ::selection{background:var(--gold);color:var(--black);}
+
+  /* ---------- texture ---------- */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:radial-gradient(rgba(198,161,91,0.05) 1px, transparent 1px);
+    background-size:3px 3px;
+    pointer-events:none;
+    z-index:1;
+    opacity:.5;
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 5vw;
+    background:rgba(10,9,8,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Cormorant Garamond',serif;
+    font-size:26px;letter-spacing:2px;
+    font-style:italic;font-weight:500;
+    color:var(--gold-bright);
+  }
+  .logo svg{width:22px;height:22px;stroke:var(--gold-bright);}
+  nav.links{display:flex;gap:38px;font-size:13px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ivory-dim);}
+  nav.links a{position:relative;padding-bottom:4px;transition:color .3s;}
+  nav.links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .35s ease;}
+  nav.links a:hover{color:var(--ivory);}
+  nav.links a:hover::after{width:100%;}
+
+  .nav-right{display:flex;align-items:center;gap:22px;}
+  .search-pill{
+    display:flex;align-items:center;gap:8px;
+    border:1px solid var(--line);border-radius:30px;
+    padding:9px 16px;width:200px;
+    transition:border-color .3s,width .3s;
+  }
+  .search-pill:focus-within{border-color:var(--gold);width:230px;}
+  .search-pill input{
+    background:none;border:none;outline:none;color:var(--ivory);
+    font-family:'Jost';font-size:13px;width:100%;letter-spacing:.5px;
+  }
+  .search-pill input::placeholder{color:var(--ivory-dim);}
+  .search-pill svg{width:14px;height:14px;stroke:var(--ivory-dim);flex-shrink:0;}
+  .icon-btn{width:18px;height:18px;stroke:var(--ivory-dim);cursor:pointer;transition:stroke .3s,transform .3s;}
+  .icon-btn:hover{stroke:var(--gold-bright);transform:translateY(-1px);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:88vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding:120px 6vw 80px;
+    z-index:2;
+  }
+  .eyebrow{
+    font-size:12px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:26px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .eyebrow::before,.eyebrow::after{content:"";width:32px;height:1px;background:var(--gold);opacity:.6;}
+  .hero h1{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:300;
+    font-size:clamp(46px,7vw,96px);
+    line-height:1.05;
+    max-width:16ch;
+    color:var(--ivory);
+  }
+  .hero h1 em{font-style:italic;color:var(--gold-bright);}
+  .hero p{
+    margin-top:26px;max-width:46ch;
+    color:var(--ivory-dim);
+    font-size:16px;line-height:1.8;letter-spacing:.3px;
+  }
+  .hero-cta{
+    margin-top:44px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center;
+  }
+  .btn-gold{
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+    color:var(--black);padding:15px 34px;border-radius:2px;
+    font-size:13px;letter-spacing:2.5px;text-transform:uppercase;
+    border:1px solid var(--gold);
+    transition:transform .3s,box-shadow .3s;
+    cursor:pointer;
+  }
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(198,161,91,0.25);}
+  .btn-ghost{
+    border:1px solid var(--line);color:var(--ivory-dim);
+    padding:15px 34px;border-radius:2px;
+    font-size:13px;letter-spacing:2.5px;text-transform:uppercase;
+    transition:border-color .3s,color .3s;
+    cursor:pointer;background:none;
+  }
+  .btn-ghost:hover{border-color:var(--gold);color:var(--ivory);}
+
+  /* signature element: waveform -> mist */
+  .signature{
+    margin-top:70px;
+    display:flex;align-items:flex-end;gap:4px;height:70px;
+    position:relative;
+  }
+  .signature span{
+    width:3px;background:linear-gradient(to top,var(--gold),var(--gold-bright));
+    border-radius:2px;
+    animation:wave 1.8s ease-in-out infinite;
+    opacity:.85;
+  }
+  @keyframes wave{
+    0%,100%{height:14px;}
+    50%{height:56px;}
+  }
+  .mist{
+    position:absolute;top:-40px;left:50%;transform:translateX(-50%);
+    width:340px;height:120px;
+    background:radial-gradient(ellipse at center, rgba(198,161,91,0.18), transparent 70%);
+    filter:blur(6px);
+    pointer-events:none;
+    animation:drift 6s ease-in-out infinite;
+  }
+  @keyframes drift{
+    0%,100%{opacity:.4;transform:translateX(-50%) translateY(0);}
+    50%{opacity:.8;transform:translateX(-50%) translateY(-14px);}
+  }
+
+  /* ---------- section shared ---------- */
+  section{padding:110px 6vw;position:relative;z-index:2;}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 64px;}
+  .section-head .eyebrow{justify-content:center;}
+  .section-head h2{
+    font-family:'Cormorant Garamond',serif;font-weight:300;
+    font-size:clamp(32px,4vw,48px);color:var(--ivory);
+  }
+  .section-head p{color:var(--ivory-dim);margin-top:16px;font-size:15px;line-height:1.7;}
+
+  /* ---------- AI personality section ---------- */
+  .ai-section{
+    background:linear-gradient(180deg,var(--charcoal),var(--black));
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .ai-grid{
+    max-width:1100px;margin:0 auto;
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+  }
+  .ai-visual{
+    aspect-ratio:1;border:1px solid var(--line);border-radius:4px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;background:var(--card);
+    overflow:hidden;
+  }
+  .ai-visual .ring{
+    position:absolute;border:1px solid var(--gold);border-radius:50%;opacity:.25;
+    animation:pulse 4s ease-in-out infinite;
+  }
+  .ai-visual .ring:nth-child(1){width:60%;height:60%;}
+  .ai-visual .ring:nth-child(2){width:80%;height:80%;animation-delay:.7s;}
+  .ai-visual .ring:nth-child(3){width:100%;height:100%;animation-delay:1.4s;}
+  @keyframes pulse{0%,100%{opacity:.12;transform:scale(1);}50%{opacity:.35;transform:scale(1.03);}}
+  .ai-visual svg{width:60px;height:60px;stroke:var(--gold-bright);position:relative;z-index:2;}
+
+  .ai-steps{list-style:none;}
+  .ai-steps li{
+    display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .ai-steps li:last-child{border-bottom:none;}
+  .ai-steps .num{
+    font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:22px;flex-shrink:0;width:34px;
+  }
+  .ai-steps h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;color:var(--ivory);margin-bottom:6px;}
+  .ai-steps p{color:var(--ivory-dim);font-size:14px;line-height:1.7;}
+
+  /* ---------- product grid ---------- */
+  .filter-row{
+    display:flex;justify-content:center;gap:34px;margin-bottom:56px;
+    font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ivory-dim);
+  }
+  .filter-row a.active{color:var(--gold-bright);}
+  .grid{
+    max-width:1200px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:28px;
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    display:flex;flex-direction:column;
+    transition:border-color .35s,transform .35s;
+  }
+  .card:hover{border-color:var(--gold);transform:translateY(-6px);}
+  .card-img{
+    aspect-ratio:3/4;position:relative;overflow:hidden;
+    background:linear-gradient(160deg,#221d18,#0f0d0b);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .bottle{width:56%;height:70%;position:relative;}
+  .bottle::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(198,161,91,.35), rgba(198,161,91,.05) 40%, transparent 70%);
+    border:1px solid var(--gold);
+    border-radius:4px 4px 14px 14px;
+  }
+  .bottle::after{
+    content:"";position:absolute;top:-14%;left:38%;width:24%;height:16%;
+    background:var(--gold);border-radius:3px;opacity:.7;
+  }
+  .card-img .wish{
+    position:absolute;top:14px;right:14px;width:17px;height:17px;
+    stroke:var(--ivory-dim);opacity:0;transition:opacity .3s,stroke .3s;
+  }
+  .card:hover .wish{opacity:1;}
+  .card-img .wish:hover{stroke:var(--gold-bright);}
+  .card-body{padding:20px 18px 24px;}
+  .card-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .card-body h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:19px;color:var(--ivory);}
+  .card-body .desc{font-size:12.5px;color:var(--ivory-dim);margin-top:6px;line-height:1.6;}
+  .card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;}
+  .price{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-bright);}
+  .add-btn{
+    width:32px;height:32px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:border-color .3s,background .3s;
+  }
+  .add-btn svg{width:14px;height:14px;stroke:var(--ivory-dim);transition:stroke .3s;}
+  .add-btn:hover{background:var(--gold);border-color:var(--gold);}
+  .add-btn:hover svg{stroke:var(--black);}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line);padding:70px 6vw 30px;
+    background:var(--charcoal);
+  }
+  .foot-top{
+    max-width:1200px;margin:0 auto;
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;
+    padding-bottom:50px;
+  }
+  .foot-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--gold-bright);margin-bottom:14px;}
+  .foot-top p{color:var(--ivory-dim);font-size:13px;line-height:1.8;max-width:32ch;}
+  .foot-col h4{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ivory);margin-bottom:18px;}
+  .foot-col a{display:block;font-size:13px;color:var(--ivory-dim);margin-bottom:12px;transition:color .3s;}
+  .foot-col a:hover{color:var(--gold-bright);}
+  .foot-bottom{
+    max-width:1200px;margin:0 auto;padding-top:26px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    font-size:11.5px;letter-spacing:1px;color:var(--ivory-dim);
+  }
+  .foot-social{display:flex;gap:16px;}
+  .foot-social svg{width:15px;height:15px;stroke:var(--ivory-dim);cursor:pointer;transition:stroke .3s;}
+  .foot-social svg:hover{stroke:var(--gold-bright);}
+
+  @media(max-width:900px){
+    nav.links{display:none;}
+    .ai-grid{grid-template-columns:1fr;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .foot-top{grid-template-columns:1fr 1fr;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    Note&nbsp;Noir
+  </div>
+  <nav class="links">
+    <a href="#" class="active">Home</a>
+    <a href="#">Women</a>
+    <a href="#">Men</a>
+    <a href="#">Unisex</a>
+  </nav>
+  <div class="nav-right">
+    <div class="search-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search a scent...">
+    </div>
+    <svg class="icon-btn" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9A4.6 4.6 0 0 1 20.8 8.6z"/></svg>
+    <svg class="icon-btn" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 2l1.5 4h9L18 2"/><path d="M3.5 6h17l-1.6 12.2a2 2 0 0 1-2 1.8H7.1a2 2 0 0 1-2-1.8L3.5 6z"/><path d="M9 10v5M15 10v5"/></svg>
+    <svg class="icon-btn" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Ai&nbsp;Composed&nbsp;Fragrance</div>
+  <h1>A scent written<br>for <em>no one else</em></h1>
+  <p>Answer a few questions about who you are. Our AI reads your personality and composes a one-of-one fragrance — blended, bottled, and shipped to you alone.</p>
+  <div class="hero-cta">
+    <button class="btn-gold">Begin Your Scent Profile</button>
+    <button class="btn-ghost">Explore The Collection</button>
+  </div>
+  <div class="signature">
+    <div class="mist"></div>
+    <span style="animation-delay:0s"></span>
+    <span style="animation-delay:.1s"></span>
+    <span style="animation-delay:.2s"></span>
+    <span style="animation-delay:.3s"></span>
+    <span style="animation-delay:.15s"></span>
+    <span style="animation-delay:.25s"></span>
+    <span style="animation-delay:.05s"></span>
+    <span style="animation-delay:.35s"></span>
+    <span style="animation-delay:.2s"></span>
+    <span style="animation-delay:.1s"></span>
+    <span style="animation-delay:.3s"></span>
+    <span style="animation-delay:0s"></span>
+  </div>
+</section>
+
+<section class="ai-section">
+  <div class="ai-grid">
+    <div class="ai-visual">
+      <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><path d="M12 2a5 5 0 0 1 5 5c0 2-1 3-1 5v2a4 4 0 0 1-8 0v-2c0-2-1-3-1-5a5 5 0 0 1 5-5z"/><path d="M9 21h6"/></svg>
+    </div>
+    <div>
+      <div class="eyebrow">How It's Composed</div>
+      <ul class="ai-steps">
+        <li>
+          <span class="num">01</span>
+          <div><h3>Tell us who you are</h3><p>A short, personality-driven questionnaire — mood, memory, the way you move through a room.</p></div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div><h3>The AI composes your accord</h3><p>Your answers are translated into a note structure: top, heart, and base, matched to thousands of fragrance profiles.</p></div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div><h3>We blend and bottle it</h3><p>Perfumers hand-finish the formula and pour a bottle that exists only for you.</p></div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div><h3>It arrives, signed</h3><p>Delivered in black glass, engraved with your scent's name — yours to keep, or return to for a refill.</p></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="collection">
+  <div class="section-head">
+    <div class="eyebrow">The Collection</div>
+    <h2>Bestselling Compositions</h2>
+    <p>Not made for you — but close. These are the accords our AI reaches for most often.</p>
+  </div>
+  <div class="filter-row">
+    <a class="active" href="#">All</a>
+    <a href="#">Women</a>
+    <a href="#">Men</a>
+    <a href="#">Unisex</a>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-img"><div class="bottle"></div><svg class="wish" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9A4.6 4.6 0 0 1 20.8 8.6z"/></svg></div>
+      <div class="card-body">
+        <div class="card-eyebrow">Eau de Parfum</div>
+        <h3>Velours Noir</h3>
+        <div class="desc">Black amber, smoked oud, a whisper of tobacco leaf.</div>
+        <div class="card-foot"><span class="price">$185</span><div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="bottle"></div><svg class="wish" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9A4.6 4.6 0 0 1 20.8 8.6z"/></svg></div>
+      <div class="card-body">
+        <div class="card-eyebrow">Eau de Parfum</div>
+        <h3>Nocturne Gold</h3>
+        <div class="desc">Saffron, warm sandalwood, a low note of honey.</div>
+        <div class="card-foot"><span class="price">$210</span><div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="bottle"></div><svg class="wish" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9A4.6 4.6 0 0 1 20.8 8.6z"/></svg></div>
+      <div class="card-body">
+        <div class="card-eyebrow">Eau de Parfum</div>
+        <h3>Ivoire Silence</h3>
+        <div class="desc">White musk, iris petal, cold linen air.</div>
+        <div class="card-foot"><span class="price">$175</span><div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="bottle"></div><svg class="wish" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9A4.6 4.6 0 0 1 20.8 8.6z"/></svg></div>
+      <div class="card-body">
+        <div class="card-eyebrow">Eau de Parfum</div>
+        <h3>Reve Fume</h3>
+        <div class="desc">Dark cherry, black tea, vetiver root.</div>
+        <div class="card-foot"><span class="price">$195</span><div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div>
+      <div class="foot-logo">Note&nbsp;Noir</div>
+      <p>An AI-composed fragrance house. Every bottle begins as a conversation and ends as a signature scent, worn by one person only.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Shop</h4>
+      <a href="#">Women</a>
+      <a href="#">Men</a>
+      <a href="#">Unisex</a>
+      <a href="#">Gift Sets</a>
+    </div>
+    <div class="foot-col">
+      <h4>About</h4>
+      <a href="#">Our AI Process</a>
+      <a href="#">The Perfumers</a>
+      <a href="#">Sustainability</a>
+    </div>
+    <div class="foot-col">
+      <h4>Support</h4>
+      <a href="#">Contact</a>
+      <a href="#">Shipping & Returns</a>
+      <a href="#">FAQ</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Note Noir. All rights reserved.</span>
+    <div class="foot-social">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M22 5.9c-.7.3-1.5.5-2.3.6.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.7 2.1 2.9 4 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.6-6.2 11.6-11.6v-.5c.8-.6 1.5-1.3 2.1-2.1z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
